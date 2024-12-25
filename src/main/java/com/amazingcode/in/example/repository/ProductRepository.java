@@ -6,4 +6,6 @@ import com.amazingcode.in.example.entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+	boolean existsByProductName(String productName);
+
 }

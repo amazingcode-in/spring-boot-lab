@@ -6,4 +6,6 @@ import com.amazingcode.in.example.entity.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
+	boolean existsByCategoryName(String categoryName);
+
 }

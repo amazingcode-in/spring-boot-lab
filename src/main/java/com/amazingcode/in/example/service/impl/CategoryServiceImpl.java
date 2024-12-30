@@ -47,6 +47,20 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Page<CategoryResponse> getAllCategory(Pageable pageable) {
+        LOG.info("Fetching categories page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+        Page<Category> existsCategories = categoryRepository.findAll(pageable);
+        if (existsCategories.isEmpty()) {
+            LOG.warn("No categories found in the database");
+            throw new NotPresentException(CategoryResponseMessage.CATEGORY_NOT_PRESENT.getMessage());
+        }
+
+        Page<CategoryResponse> categoryResponses = existsCategories.map(categoryMapper::categoryEntityToCategoryResponse);
+        LOG.info("Retrieved {} categories, total elements: {}", categoryResponses.getNumberOfElements(), categoryResponses.getTotalElements());
+        return categoryResponses;
+    }
+
+    @Override
     public CategoryResponse getCategory(Long id) {
         LOG.info("Attempting to fetch category with ID: {}", id);
         Optional<Category> existCategory = categoryRepository.findById(id);

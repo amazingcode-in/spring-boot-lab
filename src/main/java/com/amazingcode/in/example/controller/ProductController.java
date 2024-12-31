@@ -2,6 +2,8 @@ package com.amazingcode.in.example.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,16 @@ public class ProductController {
         ProductResponse createdProduct = productService.createProduct(productRequest);
         LOG.info("Successfully created product with ID: {}", createdProduct.getProductId());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ProductResponse>> getAllProducts(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        LOG.info("Fetching products page={}, size={}", page, size);
+        Page<ProductResponse> products = productService.getAllProducts(PageRequest.of(page, size));
+        LOG.info("Retrieved {} products, total elements: {}", products.getNumberOfElements(), products.getTotalElements());
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/{id}")

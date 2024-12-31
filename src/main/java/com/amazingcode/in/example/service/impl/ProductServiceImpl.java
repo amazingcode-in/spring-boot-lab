@@ -2,6 +2,8 @@ package com.amazingcode.in.example.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.amazingcode.in.example.constant.enums.ProductResponseMessage;
@@ -41,6 +43,19 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(product);
         LOG.info("Successfully created product with ID: {}", savedProduct.getProductId());
         return productMapper.productEntityToProductResponse(savedProduct);
+    }
+
+    @Override
+    public Page<ProductResponse> getAllProducts(Pageable pageable) {
+        LOG.info("Fetching products page={}, size={}", pageable.getPageNumber(), pageable.getPageSize());
+        Page<Product> productsPage = productRepository.findAll(pageable);
+        if (productsPage.isEmpty()) {
+            LOG.warn("No products found in the database");
+            throw new NotPresentException(ProductResponseMessage.PRODUCTS_NOT_PRESENT.getMessage());
+        }
+        LOG.info("Retrieved {} products, total elements: {}", 
+            productsPage.getNumberOfElements(), productsPage.getTotalElements());
+        return productsPage.map(productMapper::productEntityToProductResponse);
     }
 
     @Override

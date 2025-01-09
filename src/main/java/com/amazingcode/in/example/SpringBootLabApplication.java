@@ -14,7 +14,7 @@ public class SpringBootLabApplication {
     
     private static final Logger LOG = LoggerFactory.getLogger(SpringBootLabApplication.class);
 
-    @GetMapping
+    @GetMapping("/status")
     public ResponseEntity<String> getApplicationStatus() {
         LOG.info("Request received for application status.");
         return ResponseEntity.ok("Application started successfully.");

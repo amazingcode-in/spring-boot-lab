@@ -3,6 +3,10 @@ name: Software Composition Analysis
 on:
   workflow_dispatch:
 
+env:
+  JAVA_VERSION: 21
+  GRADLE_VERSION: 8.5
+
 jobs:
   sca-scan:
     name: SCA Scan
@@ -16,16 +20,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up JDK
+    - name: Set up JDK ${{ env.JAVA_VERSION }}
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: ${{ env.JAVA_VERSION }}
         distribution: 'microsoft'
 
-    - name: Set up Gradle
+    - name: Set up Gradle ${{ env.GRADLE_VERSION }}
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 
       with:
-        gradle-version: 8.5
+        gradle-version: ${{ env.GRADLE_VERSION }}
 
     - name: Set Gradle wrapper permissions
       run: chmod +x ./gradlew

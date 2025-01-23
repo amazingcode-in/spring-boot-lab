@@ -34,5 +34,5 @@ jobs:
       - name: Gradle Clean, Build
         run: ./gradlew clean build -x test
 
-      - name: static code quality
+      - name: Static Code Quality Check
         run: ./gradlew sonar

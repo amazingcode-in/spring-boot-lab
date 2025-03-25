@@ -13,8 +13,13 @@ import com.amazingcode.in.example.request.ProductRequest;
 import com.amazingcode.in.example.response.ProductResponse;
 import com.amazingcode.in.example.service.ProductService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/products")
+@Tag(name = "Product API", description = "Operations related to products")
 public class ProductController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductController.class);
@@ -26,6 +31,8 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @Operation(summary = "Create a new product", description = "Creates a new product with the provided details")
+    @ApiResponse(responseCode = "201", description = "Product created successfully")
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
         LOG.info("Received request to create product: {}", productRequest);
@@ -34,6 +41,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
+    @Operation(summary = "Get all products", description = "Retrieves a paginated list of all products")
+    @ApiResponse(responseCode = "200", description = "Products retrieved successfully")
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> getAllProducts(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -44,6 +53,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
+    @Operation(summary = "Get a product by ID", description = "Retrieves details of a specific product")
+    @ApiResponse(responseCode = "200", description = "Product retrieved successfully")
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable("id") Long id) {
         LOG.info("Fetching product with ID: {}", id);
@@ -52,6 +63,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
+    @Operation(summary = "Update a product", description = "Updates an existing product by ID")
+    @ApiResponse(responseCode = "200", description = "Product updated successfully")
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable("id") Long id,
@@ -62,6 +75,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
     }
 
+    @Operation(summary = "Delete a product", description = "Deletes an existing product by ID")
+    @ApiResponse(responseCode = "204", description = "Product deleted successfully")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable("id") Long id) {
         LOG.info("Attempting to delete product with ID: {}", id);

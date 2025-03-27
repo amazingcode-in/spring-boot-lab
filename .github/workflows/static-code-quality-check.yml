@@ -1,8 +1,9 @@
 
-name: Static Code Quality Check
+name: 10 - Static Code Quality Check
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 env:
   JAVA_VERSION: 21

@@ -1,7 +1,8 @@
-name: Software Composition Analysis
+name: 20 - Software Composition Analysis
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 env:
   JAVA_VERSION: 21

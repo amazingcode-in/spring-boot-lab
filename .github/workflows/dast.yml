@@ -1,7 +1,8 @@
-name: Dynamic Application Security Testing
+name: 30 - Dynamic Application Security Testing
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 env:
   JAVA_VERSION: 21

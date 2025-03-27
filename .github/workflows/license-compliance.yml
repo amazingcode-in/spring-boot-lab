@@ -1,7 +1,8 @@
-name: License Compliance Verificaton
+name: 40 - License Compliance Verificaton
 
 on:
   workflow_dispatch:
+  workflow_call:
  
 env:
   JAVA_VERSION: 21

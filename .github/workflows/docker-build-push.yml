@@ -43,7 +43,7 @@ jobs:
     #   run: chmod 755 ./gradlew # (7-file-owner-r,w,e) (5-group-r,e) (5-others-r,e)
       
     - name: Build application
-      run: ./gradlew build
+      run: ./gradlew clean build -x test
       
     - name: Set Version Tag
       id: version

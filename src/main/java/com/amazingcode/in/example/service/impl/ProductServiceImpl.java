@@ -2,6 +2,9 @@ package com.amazingcode.in.example.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CachePut(value = "products", key = "#result.productId")
     public ProductResponse createProduct(ProductRequest productRequest) {
         LOG.info("Attempting to create product with name: {}", productRequest.getProductName());
         boolean isProductPresent = productRepository.existsByProductName(productRequest.getProductName());
@@ -59,6 +63,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(value = "products", key = "#id != null ? #id.toString() : 'null'")
     public ProductResponse getProduct(Long id) {
         LOG.info("Attempting to fetch product with ID: {}", id);
         Optional<Product> existProduct = productRepository.findById(id);
@@ -71,6 +76,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CachePut(value = "products", key = "#id")
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
         LOG.info("Attempting to update product with ID: {}", id);
         Optional<Product> existProduct = productRepository.findById(id);
@@ -86,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "products", key = "#id")
     public void deleteProduct(Long id) {
         LOG.info("Attempting to delete product with ID: {}", id);
         Optional<Product> existProduct = productRepository.findById(id);

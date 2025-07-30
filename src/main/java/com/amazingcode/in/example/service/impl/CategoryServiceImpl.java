@@ -11,6 +11,9 @@ import com.amazingcode.in.example.response.CategoryResponse;
 import com.amazingcode.in.example.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CachePut(value = "categories", key = "#result.categoryId")
     public CategoryResponse createCategory(CategoryRequest categoryRequest) {
         LOG.info("Attempting to create category with name: {}", categoryRequest.getCategoryName());
         boolean isCategoryPresent = categoryRepository.existsByCategoryName(categoryRequest.getCategoryName());
@@ -61,6 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(value = "categories", key = "#id != null ? #id.toString() : 'null'")
     public CategoryResponse getCategory(Long id) {
         LOG.info("Attempting to fetch category with ID: {}", id);
         Optional<Category> existCategory = categoryRepository.findById(id);
@@ -75,6 +80,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CachePut(value = "categories", key = "#id")
     public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
         LOG.info("Attempting to update category with ID: {}", id);
         Optional<Category> existCategory = categoryRepository.findById(id);
@@ -93,6 +99,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = "categories", key = "#id")
     public void deleteCategory(Long id) {
         LOG.info("Attempting to delete category with ID: {}", id);
         Optional<Category> existCategory = categoryRepository.findById(id);
